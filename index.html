@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Embodied Agent Interface: A Single Line to Evaluate LLMs for Embodied Decision Making</title>
+    <!-- consider to add our icon here -->
+    <!-- <link rel="icon" href="" type="image/icon type"> -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="website/css/bulma.min.css">
+    <link rel="stylesheet" href="website/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="website/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="website/css/fontawesome.all.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./website/javascript/bulma-carousel.min.js"></script>
+    <script src="./website/javascript/bulma-slider.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bootstrap4.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+    <script defer src="website/javascript/fontawesome.all.min.js"></script>
+    <!-- <script src="website/javascript/peity-vanilla.js"></script> -->
+
+
+    <!-- below we load some js scripts -->
+    <script src="website/javascript/benchmark_table.js" type="module"></script>
+
+    <link rel="stylesheet" href="website/css/index.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C7GJ4FYMY9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-C7GJ4FYMY9');
+    </script>
+
+    <!-- MathJax script -->
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/javascript">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+
+    <noscript>
+        <p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101339888ns.gif" /></p>
+    </noscript>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        var toggles = document.querySelectorAll('.toggle-section');
+        toggles.forEach(function(toggle) {
+            toggle.addEventListener('click', function() {
+            var content = document.getElementById(toggle.getAttribute('aria-controls'));
+            var toggleIcon = toggle.children[1].children[0];
+            content.classList.toggle('is-active');
+            if (content.classList.contains('is-active')) {
+                toggleIcon.style.transition = 'transform 0.3s ease';
+                toggleIcon.style.transform = 'rotate(180deg)';
+            } else {
+                toggleIcon.style.transition = 'transform 0.3s ease';
+                toggleIcon.style.transform = 'rotate(0deg)';
+            }
+            });
+        });
+        });
+      </script>
+
+    <style>
+        .collapse-content {
+          display: none;
+          margin-top: 10px;
+        }
+        .collapse-content.is-active {
+          display: block;
+        }
+        /* .toggle-section .icon.is-small {
+          transition: transform 0.3s ease;
+        } */
+        /* .toggle-section .fa-angle-up {
+          transform: rotate(180deg);
+        } */
+      </style>
+</head>
+
+<body>
+
+    
+    
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title is-bold">
+                            <!-- <img src="website/img/mint-leaf-logo.png" alt="logo" width="40" height="40" /> -->
+                            Embodied Agent Interface: A Single Line to Evaluate LLMs for Embodied Decision Making
+                        </h1>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                              <a href="https://limanling.github.io/">Manling Li</a><sup>1, 2†</sup>,</span>
+                            <span class="author-block">
+                              <a href="https://www.linkedin.com/in/shiyu-zhao-1124a0266/">Shiyu Zhao</a><sup>1,†</sup>,</span>
+                            <span class="author-block">
+                              <a href="https://qinengwang-aiden.github.io/">Qineng Wang</a><sup>1, 2†</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://jameskrw.github.io/">Kangrui Wang</a><sup>1, 2†</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://bryanzhou008.github.io/">Yu Zhou</a><sup>1,†</sup>,
+                            </span>
+                          </div>
+                
+                          <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                              <a href="https://www.linkedin.com/in/sanjana-srivastava5/">Sanjana Srivastava</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://www.cemgokmen.com/">Cem Gokmen</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://profiles.stanford.edu/tonyhlee">Tony Lee</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="http://www.cs.columbia.edu/~lierranli/">Li Erran Li</a><sup>3</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://ai.stanford.edu/~zharu/">Ruohan Zhang</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="http://weiyuliu.com/">Weiyu Liu</a><sup>1</sup>,
+                            </span>
+                          </div>
+                
+                          <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                              <a href="https://cs.stanford.edu/~pliang/">Percy Liang</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="http://vision.stanford.edu/feifeili/">Li Fei-Fei</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="http://jiayuanm.com/">Jiayuan Mao</a><sup>4</sup>,
+                            </span>
+                            <span class="author-block">
+                              <a href="https://jiajunwu.com/">Jiajun Wu</a><sup>1</sup>
+                            </span>
+                          </div>
+                          
+                
+                          <div class="is-size-5 publication-authors">
+                            <span class="author-block"><sup>1</sup>Stanford University,</span>
+                            <span class="author-block"><sup>2</sup>Northwestern University,</span>
+                            <span class="author-block"><sup>3</sup>Amazon,</span>
+                            <span class="author-block"><sup>4</sup>MIT</span>
+                          </div>
+                          <div class="'is-size-5 publication-authors">
+                            <span class="author-block"><sup>†</sup>Equal contribution</span>
+                          </div>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <!-- PDF Link. -->
+                                 <!-- <span class="link-block">
+                                    <a class="btn btn-outline-dark"
+                                     role="button">
+                                    &nbsp;
+                                        <i class="fas fa-file-pdf"></i>
+                                        <span>&nbsp;&nbsp;Paper (Coming Soon)</span>
+                                    </a> &nbsp;&nbsp;
+                                 </span> -->
+                                <!-- <span class="link-block">
+                                    <a href="https://arxiv.org" class="btn btn-outline-dark"
+                                        role="button">
+                                        <span class="icon">
+                                            <i class="ai ai-arxiv"></i>
+                                        </span>
+                                        <span>arXiv</span>
+                                    </a> &nbsp;&nbsp;
+                                </span> -->
+                                <!-- Code Link. -->
+                                <span class="link-block">
+                                    <a href="https://github.com/embodied-agent-eval/embodied-agent-eval" class="btn btn-outline-dark" role="button">
+                                        <span class="icon">
+                                            <i class="fab fa-github"></i>
+                                        </span>
+                                        <span>Code</span>
+                                    </a> &nbsp;&nbsp;
+
+                                </span>
+                                <!-- Dataset Link. -->
+                                <span class="link-block">
+                                    <a href="https://huggingface.co/datasets/Inevitablevalor/EmbodiedAgentInterface" class="btn btn-outline-dark" role="button" style="display: inline-flex; align-items: center;">
+                                        <span class="icon" style="display: inline-flex; align-items: center;">
+                                            <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face" style="width: 20px; height: 18px; margin-right: 5px;">
+                                        </span>
+                                        <span>Dataset</span>
+                                    </a> &nbsp;&nbsp;
+                                </span>
+                                                                                   
+                                <!-- Dockerhub Link. -->
+                                <span class="link-block">
+                                    <a href="https://hub.docker.com/r/jameskrw/eagent-eval" class="btn btn-outline-dark" role="button">
+                                        <span class="icon"><i class="fab fa-docker"></i></span>
+                                        <span>Docker</span>
+                                    </a> &nbsp;&nbsp;
+                                </span>
+                                <!-- Behavior Pypi Python Package Link. -->
+                                <span class="link-block">
+                                    <a href="https://pypi.org/project/eagent-eval/" class="btn btn-outline-dark" role="button">
+                                        <span class="icon"><i class="fab fa-python"></i></span>
+                                        <span>EAgent</span>
+                                    </a> &nbsp;&nbsp;
+                                </span>
+                                <!-- Virtualhome Pypi Python Package Link. -->
+                                <!-- <span class="link-block">
+                                    <a href="https://pypi.org/project/virtualhome-eval/" class="btn btn-outline-dark" role="button">
+                                        <span class="icon"><i class="fab fa-python"></i></span>
+                                        <span>VirtualHome Eval</span> 
+                                    </a> &nbsp;&nbsp;
+                                </span> -->
+                                <!-- Docs Link. -->
+                                <span class="link-block">
+                                    <a href="https://embodied-agent-eval.readthedocs.io/en/latest/#" class="btn btn-outline-dark" role="button">
+                                        <span class="icon">
+                                            <i class="fa fa-book"></i>
+                                        </span>
+                                        <span>Docs</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Add the video element here -->
+<!--     <video autoplay muted loop playsinline style="width: 100%; height: auto;">
+        <source src="https://embodied-agent-eval.github.io/website/data/eagent.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video> -->
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <video id="teaser" autoplay muted loop playsinline controls width="100%">
+            <source src="https://github.com/embodied-agent-eval/embodied-agent-eval.github.io/raw/main/website/data/embodied-agent-interface.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+        
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <h2 class="subtitle">
+                    <b>Embodied Agent Interface</b> aims to tackle the following challenges in evaluating LLMs for building embodied decision-making agents: (1) Standardization of goal specifications. (2) Standardization of modules and interfaces. (3) Broad coverage of evaluation and fine-grained metrics.
+                </h2>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="main-results-tab" data-bs-toggle="tab"
+                            data-bs-target="#benchmark-table-content" type="button" role="tab"
+                            aria-controls="main-results-tab" aria-selected="true">BEHAVIOR</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="eurus-code-table-tab" data-bs-toggle="tab"
+                            data-bs-target="#eurus-code-table-content" type="button" role="tab"
+                            aria-controls="eurus-code-table-tab" aria-selected="false">VirtualHome</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="benchmark-table-content" role="tabpanel"
+                        aria-labelledby="benchmark-table-content">
+                        <div id="behavior-benchmark-main-table"></div>
+                    </div>
+                    <div class="tab-pane fade" id="eurus-code-table-content" role="tabpanel"
+                        aria-labelledby="eurus-code-table-content">
+                        <div id="virtualhome-benchmark-main-table"></div>
+                    </div>
+                </div>
+
+                <br>
+
+                <h3 class="title is-3">Dataset Viewer</h3>
+                <iframe
+                src="https://huggingface.co/datasets/Inevitablevalor/EmbodiedAgentInterface/embed/viewer/default/behavior"
+                frameborder="0"
+                width="100%"
+                height="560px"
+                ></iframe>
+                <br>
+                <br>
+
+                <h3 class="title is-3">Empirical Findings</h3>
+                    <div class="content has-text-justified">
+                        <ol>
+                            <li><strong>Goal Interpretation:</strong>
+                                <ul>
+                                    <li>LLMs struggle to translate natural language instructions into grounded states.</li>
+                                    <li>Common errors include generating intermediate goals and omitting spatial relationship goals.</li>
+                                    <li>Gemini 1.5 Pro has the highest goal interpretation performance, while Claude-3 Opus excels in goal retrieval rate.</li>
+                                    <li>Proprietary LLMs make fewer grammar errors compared to open-source LLMs.</li>
+                                </ul>
+
+                                <br>
+                            </li>
+                            <li><strong>Action Sequencing:</strong>
+                                <ul>
+                                    <li>Reasoning ability is crucial for LLMs; trajectory feasibility errors are common (41.2%).</li>
+                                    <li>o1-preview has the highest task (81.0%) and execution success rates (91.0%) in BEHAVIOR. Mistral Large (73.4%) and Gemini 1.5 Pro (73.1%) outperform it in VirtualHome.</li>
+                                    <li>SOTA LLMs make fewer grammar errors. For example, Claude-3 Opus makes no errors, while GPT-3.5-turbo has a 4.0% error rate in BEHAVIOR.</li>
+                                    <li>Common runtime errors include missing steps and wrong order. In BEHAVIOR, GPT-4o encounters 36.0% missing step errors and 9.0% wrong order errors.</li>
+                                    <li>LLMs perform better with state goals than relation goals, but struggle with complex action goals. GPT-4o achieves 82.0% success in state goals and 67.8% in relation goals in VirtualHome.</li>
+                                    <li>Task complexity, such as the number of goals and action sequence length, lowers success rates. In BEHAVIOR, tasks with more than 10 goals have a success rate below 40%.</li>
+                                </ul>                                
+
+                                <br>
+                                <br>
+                            </li>
+
+                            <li><strong>Subgoal Decomposition:</strong>
+                                <ul>
+                                    <li>Subgoal decomposition is not easier than action sequencing in abstract action spaces.</li>
+                                    <li>o1-preview shows superior performance in VirtualHome (89.4%) and BEHAVIOR (57.0%). Gemini 1.5 Flash also performs well in VirtualHome (89.1%).</li>
+                                    <li>SOTA models avoid grammar errors but can hallucinate actions (e.g., GPT-4o adds "POUR" in VirtualHome).</li>
+                                    <li>Common runtime errors: extra steps in VirtualHome, missing steps in BEHAVIOR.</li>
+                                    <li>LLMs like o1-preview are more accurate in action goals in VirtualHome; state and relation goals in BEHAVIOR are more difficult due to stricter precondition checks.</li>
+                                    <li>Performance is lower in BEHAVIOR due to complex task representations with quantifiers like "forall" and "forpairs."</li>
+                                </ul>                                
+                                <br>
+                            </li>
+
+                            
+                            
+                            <li><strong>Transition Modeling:</strong>
+                                <ul>
+                                    <li>Models excel in specific categories like object states and orientation.</li>
+                                    <li>Non-spatial relations consistently pose a challenge.</li>
+                                    <li>Planning effectiveness relies on consistency in predicted action space.</li>
+                                </ul>
+                                <br>
+                            </li>
+                            <li><strong>Sensitivity Analysis:</strong>
+                                <ul>
+                                    <li>Actions like "plug_in" and "walk_towards" show low success rates.</li>
+                                    <li>Complex interactions like "slice_carvingknife" and "place_inside" present challenges.</li>
+                                    <li>Training regimens may not fully capture real-world interaction diversity.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Pipeline-Based vs. Modularized:</strong>
+                                <ul>
+                                    <li>Similar trajectory executable rates for both methods.</li>
+                                    <li>Pipeline-based methods suffer from error accumulation.</li>
+                                    <li>SOTA LLMs avoid grammar errors; less advanced models do not.</li>
+                                    <li>All LLMs are prone to runtime errors, missing necessary steps.</li>
+                                </ul>
+                            </li>
+                            
+                            
+                            <li><strong>Replanning and Feedback:</strong>
+                                <ul>
+                                    <li>Replanning based on feedback significantly improves performance.</li>
+                                    <li>Replanning can result in over-generation of actions.</li>
+                                </ul>
+                            </li>                           
+                        </ol>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section" id="abstract">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-2">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            <b>Problem:</b> We aim to evaluate Large Language Models (LLMs) for embodied decision making. While a significant body of work has been leveraging LLMs for decision making in embodied environments, we still lack a systematic understanding of their performances, because they are usually applied in different domains for different purposes, and built based on different inputs and outputs. Furthermore, existing evaluations tend to rely solely on a final success rate, making it difficult to pinpoint what ability is missing in LLMs and where the problem lies, which in turn, blocks embodied agents from leveraging LLMs effectively and selectively.
+                        </p>
+                        <p>
+                            <b>Method:</b> To address these limitations, we propose a generalized interface (<b>Embodied Agent Interface</b>) that supports the formalization of various types of tasks and input-output specifications of LLM-based modules. Specifically, it allows us to unify <b>1)</b> a broad set of embodied decision making tasks involving both state and temporally extended goals, <b>2)</b> four commonly-used LLM-based modules for decision making: goal interpretation, subgoal decomposition, action sequencing, and transition modeling, and <b>3)</b> a collection of fine-grained metrics which break down evaluation into various types of errors, such as hallucination errors, affordance errors, various types of planning errors, etc.
+                        </p>
+                        <p>
+                            <b>Conclusion:</b> Overall, our benchmark offers a comprehensive and systematic assessment of LLMs' performance for different subtasks, pinpointing the strengths and weaknesses in LLM-powered embodied AI systems, and providing insights for effective and selective use of LLMs in embodied decision making.
+                        </p>
+                    </div>
+                    <figure>
+                        <img src="website/img/teaser.png" alt="Embodied agent interface overview." class="EAgent_overview_image"/>
+                        <figcaption  style="font-style: italic;">
+                            <b>Figure 1:</b> <b>Embodied Agent Interface</b> unifies a broad set of tasks involving both state and temporally extended goals and four LLM-based modules for decision making.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+            <!--/ Abstract. -->
+        </div>
+    </section>
+
+    <!-- <section class="section" id="dataset_viewer">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <h2 class="title is-2" style="text-align: center;">Dataset Viewer</h2>
+                <br>
+                
+            </div>
+        </div>
+    </section> -->
+
+    <section class="section" id="embodied_agent_interface_detail">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <!-- <div class="column is-full-width"> -->
+                    <h2 class="title is-2" style="text-align: center;">Embodied Agent Interface</h2>
+                    <br>
+                    <div class="content has-text-justified">
+                        <p>
+                            In our Embodied Agent Interface, we propose a set of ability modules to evaluate LLMs for embodied decision making. The four ability modules are: Goal Interpretation, Subgoal Decomposition, Action Sequencing, and Transition Modeling. We provide a detailed description of each module below.
+                        </p>
+                        <h3 class="title is-4">Ability Module 1: Goal Interpretation</h3>
+                        <p>
+                            Goal Interpretation aims to ground the natural language instruction to the environment representations of objects, states, relations, and actions. For example, the task instruction "Use the rag to clean the trays, the bowl, and the refrigerator. When you are done, leave the rag next to the sink..." can be grounded to specific objects with IDs, such as fridge (ID: 97), tray (ID: 1), bowl (ID: 1), rag (ID: 0), and sink (ID: 82). Note that a simple natural language description can be grounded into a set of multiple goal conditions (object state and relation). 
+                        </p>
+                        
+                        <h3 class="title is-4">Ability Module 2: Subgoal Decomposition</h3>
+                        <p>
+                            Subgoal Decomposition generates a sequence of states, where each state can be a set of objects and their states. Here, we highlight the important states, such as the transitions between a sequence of next_to(rag.0, sink.82), toggled_on(sink.82), soaked(rag.0), toggled_off(sink.82), open(fridge.97), not_stained(fridge.97). To achieve these state transitions, we can use a high-level planner such as BFS to search for the Action Sequences that achieve these state transitions. We obtain the following action sequence: RIGHT_GRASP(rag.0), RIGHT_PLACE_NEXTTO(sink.82), TOGGLE_ON(sink.82), SOAK(rag.0), TOGGLE_OFF(sink.82), OPEN(fridge.97), CLEAN(fridge.97). Note that multiple actions may be required to achieve a single one-step state transition. For example, to perform the state transition next_to(rag.0, sink.82) → toggled_on(sink.82), we need two actions RIGHT_GRASP(rag.0), RIGHT_PLACE_NEXTTO(sink.82). See <a href="#EAgent_taxtonomy_example">Figure 2</a> for the input and output formulation.
+                        </p>
+
+                        <figure id="EAgent_taxtonomy_example">
+                            <img src="website/img/taxonomy-ability.png" alt="Embodied agent interface taxonomy example." class="EAgent_taxtonomy_image" style="width: 75%;"/>
+                            <figcaption>
+                                <b>Figure 2:</b> The input and output formulation of four ability modules for <b>Embodied Agent Interface</b>.
+                            </figcaption>
+                        </figure>
+                        
+                        <h3 class="title is-4">Ability Module 3: Action Sequencing</h3>
+                        <p>
+                            Action Sequences are essential to achieve the state transitions identified in Subgoal Decomposition. For example, a successful execution of the action sequence RIGHT_GRASP(rag.0), RIGHT_PLACE_NEXTTO(sink.82), TOGGLE_ON(sink.82), SOAK(rag.0), TOGGLE_OFF(sink.82), OPEN(fridge.97), CLEAN(fridge.97) is shown in <a href="#EAgent_excution_example">Figure 3</a>.
+                        </p>
+                        
+                        <h3 class="title is-4">Ability Module 4: Transition Modeling</h3>
+                        <p>
+                            Transition Modeling serves as the low-level controller to guide the simulator in performing state transitions from preconditions to post-effects. For example, in cleaning task, the input is the operator name soak, and the preconditions are three states: holding (?obj1), next_to (?sink ?agent), and toggled_on (?sink). The post effect after executing SOAK is soaked (?obj1).
+                        </p>
+                        
+                        
+                        
+                        <figure id="EAgent_excution_example">
+                            <img src="website/img/excution_example.png" alt="Example of successful execution in Embodied Agent Interface." class="EAgent_excution_image" style="width: 75%;"/>
+                            <figcaption>
+                                <b>Figure 3:</b> An example of successful execution in <b>Embodied Agent Interface</b>.
+                            </figcaption>
+                        </figure>
+                    </div>
+                <!-- </div> -->
+                <div class="column is-centered">
+
+                    <h2 class="title is-2" style="text-align: center;">Evaluation Setup</h2>
+
+                    <br>
+                    <!-- <h4 class="title is-5">Annotation</h4> -->
+                    <div class="content has-text-justified">
+                        <p>
+                            We evaluate the performance of LLMs for embodied decision making using the Embodied Agent Interface. Below is a detailed description of the evaluation setup.
+                        </p>
+                        <h3 class="title is-4">Dataset Description</h3>
+                        <p>Focusing on complex long-horizon tasks, we select <strong>VirtualHome (V)</strong> and <strong>BEHAVIOR (B)</strong> as our evaluation simulators based on their task length and scene complexity. <a href="#dataset_statistics">Table 1</a> shows our annotations. Apart from the goal and trajectory annotations, we introduce the Goal Action annotation to reflect necessary actions that do not have post effects, such as the goal action <em>touch</em> in the task “<em>pet the cat</em>”. In the subset of VirtualHome tasks we work on, \(80.7\%\) task categories include instructions with action steps longer than \(10\), and \(33\%\) of the instructions have step lengths of more than \(10\).</p>
+
+                        <p>
+                            We select <strong>BEHAVIOR</strong> as another simulator for our evaluation due to its task complexity. BEHAVIOR BDDL goals may contain quantifiers, such as (forpairs (?jar ?apple) (inside ?apple ?jar)), which need to be translated into grounded goals with only atomic propositions, e.g., and ((inside apple_1 jar_1) (inside apple_2 jar_2)). There can be different grounded goals that satisfy the same BDDL goal, such as ((inside apple_2 jar_1) (inside apple_1 jar_2)). We call them goal options. In general, one BDDL goal corresponds to a number of goal options. The average number of grounded goals for each task is \(6.7\), and there are \(4,164.4\) goal options for each task on average.
+                        </p>
+                        
+                        <br>
+                        <!-- <h4 class="title is-5">Dataset Format</h3> -->
+                        <p>Each instance in the dataset represents a task goal. Specifically, each task contains the following data:</p>
+                        <ul>
+                            <li>Natural language task name</li>
+                            <li>Natural language task instruction</li>
+                            <li>Symbolic goal definition (including its LTL form)</li>
+                            <li>Symbolic action trajectory</li>
+                            <li>The transition models involved in the task</li>
+                        </ul>
+                        <p>For tasks in the BEHAVIOR environment, the dataset also includes accompanying VR human demonstration videos that showcase the execution of the ground truth action trajectories.</p>
+                        
+
+                        
+                        <!-- <div id="results-carousel" class="carousel results-carousel">
+                            <div class="box m-5">
+                              <div class="content has-text-centered">
+                                <img src="website/img/virtualhome_data_format.png" alt="algebraic reasoning" width="80%"/>
+                                <p> Examples of our newly annotated datasets: IQTest, FunctionQA, and PaperQA.</p>
+                              </div>
+                            </div>
+                            <div class="box m-5">
+                              <div class="content has-text-centered">
+                                <img src="website/img/behavior_data.png" alt="arithmetic reasoning" width="50%"/>
+                                <p> Summary of the 31 different source datasets in abc.
+                              </div>
+                            </div>
+                          </div> -->
+
+                        <figure>
+                            <img src="website/img/virtualhome_data_format.png" alt="VirtualHome dataset structure example" style="width: 60%;">
+                            <figcaption>
+                                <b>Figure 4:</b> VirtualHome dataset structure example.
+                            </figcaption>
+                        </figure>
+                        
+                        <figure>
+                            <img src="website/img/behavior_data.png" alt="BEHAVIOR dataset structure example" style="width: 60%;">
+                            <figcaption>
+                                <b>Figure 5:</b> BEHAVIOR dataset structure example.
+                            </figcaption>
+                        </figure>
+
+                        <p>Please find our JSON data format in this link: <a href="https://huggingface.co/datasets/Inevitablevalor/EmbodiedAgentInterface">Dataset JSON Format</a></p>
+                    </div>
+                    <h3 class="title is-4">LLMs Implementations</h3>
+                    <div class="content has-text-justified">
+                        <p>
+                            We integrated our evaluation pipeline into the <a href="https://crfm.stanford.edu/helm/">HELM</a> code base for easy and reproducible LLM inference. Users can set up their environment using <a href="https://github.com/embodied-agent-eval/embodied-agent-eval/tree/main">here</a>. We standardized decoding parameters across all models, using temperature zero for \(\operatorname*{arg\,max}\) sampling. Evaluating all models on our benchmark required \(180\) runs. Detailed model information is provided in the table below.
+                        </p>
+                    </div>
+                    <br>
+                </div>
+                <!-- <div class="columns is-centered m-6">
+                    <div class="column is-max-desktop has-text-centered">
+                      <h2 class="title is-4" id="visualization">Visualization</h2>
+                      <iframe src="visualizer/explore.html" style="width: 100%;min-height: 100vh; border-radius: 20px;"></iframe>
+                    </div>
+                </div> -->
+                
+            </div>
+        </div>
+
+    </section>
+
+    <!-- <section class="section" id="evaluation">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                
+            </div>
+        </div>
+    </section> -->
+
+
+    <!-- <section class="section" id="BibTeX">
+        <div class="container is-max-desktop content">
+            <h2 class="title">BibTeX</h2>
+            <pre>
+                reference here
+            </pre>
+        </div>
+    </section> -->
+
+    <footer class="footer">
+        <div align="center" class="container">
+            <div class="columns is-centered">
+                <div class="content is-small">
+                    This website templated is borrowed from <a
+                        href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+
+</html>
